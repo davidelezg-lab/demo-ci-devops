@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        sonarScanner 'SonarScanner'
+    }
+
     stages {
 
         stage('Instalar dependencias') {
@@ -15,15 +19,14 @@ pipeline {
             }
         }
 
-stage('SonarQube') {
-    steps {
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-            bat """
-            sonar-scanner -Dsonar.login=%SONAR_TOKEN%
-            """
+        stage('SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    bat """
+                    sonar-scanner -Dsonar.login=%SONAR_TOKEN%
+                    """
+                }
+            }
         }
-    }
-}
-
     }
 }
