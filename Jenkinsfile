@@ -19,5 +19,11 @@ pipeline {
                 sh 'node app.js & sleep 5'
             }
         }
+	stage('Test') {
+    		steps {
+        sh 'npm test'
+    }
+}
+
     }
 }
