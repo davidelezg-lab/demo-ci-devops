@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        sonarRunner 'SonarScanner'
-    }
-
     stages {
 
         stage('Instalar dependencias') {
@@ -21,10 +17,11 @@ pipeline {
 
         stage('SonarQube') {
             steps {
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    bat """
-                    sonar-scanner -Dsonar.login=%SONAR_TOKEN%
-                    """
+                script {
+                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    withSonarQubeEnv('SonarCloud') {
+                        bat "\"${scannerHome}\\bin\\sonar-scanner.bat\" -Dsonar.login=%SONAR_AUTH_TOKEN%"
+                    }
                 }
             }
         }
