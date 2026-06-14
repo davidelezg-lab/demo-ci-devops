@@ -19,8 +19,12 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withSonarQubeEnv('SonarCloud') {
-                        bat "\"${scannerHome}\\bin\\sonar-scanner.bat\" -Dsonar.login=%SONAR_AUTH_TOKEN%"
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        withSonarQubeEnv('SonarCloud') {
+                            bat 'echo JAVA_HOME=%JAVA_HOME%'
+                            bat 'java -version'
+                            bat "\"${scannerHome}\\bin\\sonar-scanner.bat\" -Dsonar.token=%SONAR_TOKEN%"
+                        }
                     }
                 }
             }
