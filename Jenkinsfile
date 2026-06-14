@@ -2,11 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Clonar código') {
-            steps {
-                git 'https://github.com/davidelezg-lab/demo-ci-devops.git'
-            }
-        }
 
         stage('Instalar dependencias') {
             steps {
@@ -14,16 +9,11 @@ pipeline {
             }
         }
 
-        stage('Ejecutar app (test simple)') {
+        stage('Test') {
             steps {
-                sh 'node app.js & sleep 5'
+                sh 'npm test'
             }
         }
-	stage('Test') {
-    		steps {
-        sh 'npm test'
-    }
-}
 
     }
 }
